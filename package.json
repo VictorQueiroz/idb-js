@@ -13,6 +13,7 @@
     "webpack": "5.x",
     "webpack-cli": "5.x"
   },
+  "main": "./src/index.js",
   "scripts": {
     "prepublishOnly": "npx tsc -b src --force"
   },
