@@ -1,5 +1,7 @@
 import { Database } from "../src";
-(async () => {
+import { expect } from "chai";
+
+domTest(async () => {
   const db = new Database<{
     recordingBlobParts: {
       recordingId: string;
@@ -9,9 +11,11 @@ import { Database } from "../src";
       id: string;
     };
   }>("test", 1);
-  db.transaction("recordings", "readonly", {})
-    .objectStore("recordings")
-    .index("id");
-})().catch((reason) => {
-  console.error(reason);
+  expect(
+    await db
+      .transaction("recordings", "readonly", {})
+      .objectStore("recordings")
+      .index("id")
+      .get("1")
+  ).to.be.null;
 });
