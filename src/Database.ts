@@ -5,9 +5,11 @@ export default class Database<
   ModelMap extends Record<string, unknown> = Record<string, unknown>
 > {
   readonly #database: Promise<IDBDatabase | null>;
+  readonly #request;
   public constructor(databaseName: string, version: number) {
+    const req = indexedDB.open(databaseName, version);
+    this.#request = req;
     this.#database = idbRequestToPromise(() => {
-      const req = indexedDB.open(databaseName, version);
       req.onupgradeneeded = this.onUpgradeNeeded;
       return req;
     });
@@ -26,6 +28,9 @@ export default class Database<
   }
   public result() {
     return this.#database;
+  }
+  protected request() {
+    return this.#request;
   }
   protected onUpgradeNeeded(_: IDBVersionChangeEvent) {}
 }
