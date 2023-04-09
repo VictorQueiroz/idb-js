@@ -10,9 +10,6 @@ export default class ObjectStoreIndex<Value, K extends keyof Value> {
       objectStore ? objectStore.index(name) : null
     );
   }
-  public value() {
-    return this.#value;
-  }
   public async get(value: Value[K]) {
     let index: IDBIndex | null;
     try {
