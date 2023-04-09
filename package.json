@@ -10,6 +10,7 @@
     "puppeteer": "19.x",
     "ts-node": "^10.9.1",
     "typescript": "5.x",
+    "utility-types": "3.x",
     "webpack": "5.x",
     "webpack-cli": "5.x"
   },
