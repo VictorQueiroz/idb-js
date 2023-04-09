@@ -37,9 +37,11 @@ export default class ObjectStore<Value, ObjectStoreNames> {
     IDBCursorWithValue,
     { value: Value }
   > | null> | null> {
-    const objectStore = await this.#value;
-    if (objectStore === null) return null;
-    return objectStore.openCursor(query, direction);
+    return (await this.#value)?.openCursor(query, direction) ?? null;
+  }
+  public async delete(key: IDBValidKey | IDBKeyRange) {
+    const value = await this.#value;
+    return value ? idbRequestToPromise(() => value.delete(key)) : null;
   }
   public index<K extends keyof Value>(name: K) {
     return new Index<Value, K>(this.#value, name as string);
