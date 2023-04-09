@@ -1,0 +1,12 @@
+{
+  "extends": "../tsconfig.base.json",
+  "include": [
+    "ObjectStore.ts",
+    "Transaction.ts",
+    "types.ts",
+    "index.ts",
+    "ObjectStoreIndex.ts",
+    "Database.ts",
+    "idbRequestToPromise.ts"
+  ]
+}
