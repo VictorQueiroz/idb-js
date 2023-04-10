@@ -2,6 +2,8 @@ export type Key<T> = Brand<T, "key">;
 
 export type Unique<T> = Brand<T, "unique">;
 
+export type AutoIncrement<T> = Brand<T, "autoIncrement">;
+
 export type Brand<T, U> = {
   value: T;
   brand: U;

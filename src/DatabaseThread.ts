@@ -2,7 +2,7 @@ export default class DatabaseThread {
   #pending = Promise.resolve();
   public run<R>(fn: () => Promise<R>): Promise<R> {
     const promise = this.#pending.then(() => fn());
-    this.#pending = Promise.all([this.#pending, promise])
+    this.#pending = promise
       .then(() => {})
       .catch((reason) => {
         console.error(
