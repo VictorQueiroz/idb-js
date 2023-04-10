@@ -44,9 +44,9 @@ export default class ObjectStore<Value> extends DeferredTransaction {
     query?: IDBValidKey | IDBKeyRange | null,
     direction?: IDBCursorDirection
   ) {
-    return this.openTransaction((objectStore) => {
-      objectStore.openKeyCursor(query, direction);
-    });
+    return this.openTransaction((objectStore) =>
+      objectStore.openKeyCursor(query, direction)
+    );
   }
   public async openCursor(
     query?: IDBValidKey | IDBKeyRange | null,
