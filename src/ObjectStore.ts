@@ -1,54 +1,65 @@
 import DatabaseThread from "./DatabaseThread";
+import DeferredTransaction, {
+  IOpenTransactionInfo,
+} from "./DeferredTransaction";
 import Index from "./ObjectStoreIndex";
 import idbRequestToPromise from "./idbRequestToPromise";
 
-export default class ObjectStore<Value, ObjectStoreNames> {
-  readonly #value;
+export default class ObjectStore<Value> extends DeferredTransaction {
   readonly #thread;
+  readonly #openTransactionInfo;
+  readonly #database;
+  readonly #objectStoreName;
   public constructor(
-    transaction: Promise<IDBTransaction | null>,
+    database: Promise<IDBDatabase | null>,
+    openTransactionInfo: IOpenTransactionInfo,
     thread: DatabaseThread,
-    name: ObjectStoreNames
+    objectStoreName: string
   ) {
+    super(database, openTransactionInfo, thread, objectStoreName);
     this.#thread = thread;
-    this.#value = this.#thread.run(() =>
-      transaction.then((transaction) =>
-        transaction ? transaction.objectStore(name as string) : null
-      )
-    );
+    this.#objectStoreName = objectStoreName;
+    this.#database = database;
+    this.#openTransactionInfo = openTransactionInfo;
   }
   public async put(value: Value) {
-    const objectStore = await this.#value;
-    if (objectStore === null) return null;
-    return this.#toPromise(() => objectStore.put(value));
+    return this.openTransaction((objectStore) =>
+      idbRequestToPromise(() => objectStore.put(value))
+    );
   }
   public async getAll(
     query?: IDBValidKey | IDBKeyRange | null,
     count?: number
   ) {
-    const objectStore = await this.#value;
-    if (objectStore === null) return null;
-    return this.#toPromise<Value[]>(() => objectStore.getAll(query, count));
+    return this.openTransaction((objectStore) =>
+      idbRequestToPromise<Value[]>(() => objectStore.getAll(query, count))
+    );
   }
   public async get(query: IDBValidKey | IDBKeyRange) {
-    const objectStore = await this.#value;
-    if (objectStore === null) return null;
-    return this.#toPromise<Value>(() => objectStore.get(query));
+    return this.openTransaction((objectStore) => {
+      return idbRequestToPromise<Value>(() => objectStore.get(query));
+    });
   }
   public async openCursor(
     query?: IDBValidKey | IDBKeyRange | null,
     direction?: IDBCursorDirection
   ) {
-    return (await this.#value)?.openCursor(query, direction) ?? null;
+    return this.openTransaction((objectStore) =>
+      objectStore.openCursor(query, direction)
+    );
   }
   public async delete(key: IDBValidKey | IDBKeyRange) {
-    const value = await this.#value;
-    return value ? this.#toPromise(() => value.delete(key)) : null;
+    return this.openTransaction((store) =>
+      idbRequestToPromise(() => store.delete(key))
+    );
   }
   public index<K extends keyof Value>(name: K) {
-    return new Index<Value, K>(this.#value, this.#thread, name as string);
-  }
-  #toPromise<T>(fn: () => IDBRequest<T>) {
-    return this.#thread.run(() => idbRequestToPromise(fn));
+    return new Index<Value, K>(
+      this.#database,
+      this.#openTransactionInfo,
+      this.#thread,
+      this.#objectStoreName,
+      name as string
+    );
   }
 }

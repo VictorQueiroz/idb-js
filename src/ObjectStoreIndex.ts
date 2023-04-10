@@ -1,38 +1,29 @@
 import DatabaseThread from "./DatabaseThread";
+import DeferredTransaction, {
+  IOpenTransactionInfo,
+} from "./DeferredTransaction";
 import idbRequestToPromise from "./idbRequestToPromise";
 
-export default class ObjectStoreIndex<Value, K extends keyof Value> {
-  readonly #value;
-  readonly #thread;
+export default class ObjectStoreIndex<
+  Value,
+  K extends keyof Value
+> extends DeferredTransaction {
+  readonly #indexName;
   public constructor(
-    objectStore: Promise<IDBObjectStore | null>,
+    database: Promise<IDBDatabase | null>,
+    openTransactionInfo: IOpenTransactionInfo,
     thread: DatabaseThread,
-    name: string
+    objectStoreName: string,
+    indexName: string
   ) {
-    this.#thread = thread;
-    this.#value = objectStore.then((objectStore) =>
-      objectStore ? objectStore.index(name) : null
-    );
+    super(database, openTransactionInfo, thread, objectStoreName);
+    this.#indexName = indexName;
   }
   public async get(value: Value[K]) {
-    let index: IDBIndex | null;
-    try {
-      index = await this.#value;
-      if (!index) {
-        throw new Error("promise returned null");
-      }
-    } catch (reason) {
-      console.error(
-        "object store promise failed to be resolved with error: %o",
-        reason
-      );
-      return null;
-    }
-    const indexValue = index;
-    return indexValue
-      ? this.#thread.run(() =>
-          idbRequestToPromise<Value>(() => indexValue.get(value as IDBValidKey))
-        )
-      : null;
+    return this.openTransaction((store) =>
+      idbRequestToPromise<Value>(() =>
+        store.index(this.#indexName).get(value as IDBValidKey)
+      )
+    );
   }
 }

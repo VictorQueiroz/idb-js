@@ -3,6 +3,7 @@
   "include": [
     "ObjectStore.ts",
     "DatabaseThread.ts",
+    "DeferredTransaction.ts",
     "ObjectStoreIndex.ts",
     "Transaction.ts",
     "types.ts",
