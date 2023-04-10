@@ -1,6 +1,5 @@
 import Index from "./ObjectStoreIndex";
 import idbRequestToPromise from "./idbRequestToPromise";
-import { Assign } from "utility-types";
 
 export default class ObjectStore<Value, ObjectStoreNames> {
   readonly #value;
@@ -33,10 +32,7 @@ export default class ObjectStore<Value, ObjectStoreNames> {
   public async openCursor(
     query?: IDBValidKey | IDBKeyRange | null,
     direction?: IDBCursorDirection
-  ): Promise<IDBRequest<Assign<
-    IDBCursorWithValue,
-    { value: Value }
-  > | null> | null> {
+  ): Promise<IDBRequest<IDBCursorWithValue | null> | null> {
     return (await this.#value)?.openCursor(query, direction) ?? null;
   }
   public async delete(key: IDBValidKey | IDBKeyRange) {
