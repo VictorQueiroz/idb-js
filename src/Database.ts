@@ -23,7 +23,7 @@ export default class Database<
   ): Transaction<ModelMap, K> {
     return new Transaction<ModelMap, K>(
       this.result(),
-      thread,
+      this.#thread,
       storeNames,
       mode,
       options

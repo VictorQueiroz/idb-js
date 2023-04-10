@@ -6,20 +6,34 @@ export default class Transaction<
   K extends keyof ModelMap
 > {
   readonly #value;
+  readonly #database;
+  readonly #thread;
+  readonly #storeNames;
+  readonly #mode;
+  readonly #options;
   public constructor(
-    private readonly database: Promise<IDBDatabase | null>,
-    private readonly thread: DatabaseThread,
-    private readonly storeNames: K | K[],
-    private readonly mode: IDBTransactionMode,
-    private readonly options: IDBTransactionOptions
+    database: Promise<IDBDatabase | null>,
+    thread: DatabaseThread,
+    storeNames: K | K[],
+    mode: IDBTransactionMode,
+    options: IDBTransactionOptions
   ) {
-    this.#value = this.database.then((db) =>
+    this.#database = database;
+    this.#thread = thread;
+    this.#storeNames = storeNames;
+    this.#mode = mode;
+    this.#options = options;
+    this.#value = this.#database.then((db) =>
       db
-        ? db.transaction(this.storeNames as string[], this.mode, this.options)
+        ? db.transaction(
+            this.#storeNames as string[],
+            this.#mode,
+            this.#options
+          )
         : null
     );
   }
   public objectStore(name: K) {
-    return new ObjectStore<ModelMap[K], K>(this.#value, thread, name);
+    return new ObjectStore<ModelMap[K], K>(this.#value, this.#thread, name);
   }
 }
