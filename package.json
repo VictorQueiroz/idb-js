@@ -20,7 +20,7 @@
   },
   "name": "idb-javascript",
   "license": "MIT",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "files": [
     "src/**/*.{js,map,d.ts}"
   ]
