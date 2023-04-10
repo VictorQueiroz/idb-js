@@ -7,7 +7,7 @@ export default class Database<
 > {
   readonly #database: Promise<IDBDatabase | null>;
   readonly #request;
-  readonyl #thread = new DatabaseThread();
+  readonly #thread = new DatabaseThread();
   public constructor(databaseName: string, version: number) {
     const req = indexedDB.open(databaseName, version);
     this.#request = req;
