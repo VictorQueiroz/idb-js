@@ -26,4 +26,20 @@ export default class ObjectStoreIndex<
       )
     );
   }
+  public openCursor(
+    query?: IDBValidKey | IDBKeyRange | null,
+    direction?: IDBCursorDirection
+  ) {
+    return this.openTransaction((objectStore) => {
+      objectStore.index(this.#indexName).openCursor(query, direction);
+    });
+  }
+  public openKeyCursor(
+    query?: IDBValidKey | IDBKeyRange | null,
+    direction?: IDBCursorDirection
+  ) {
+    return this.openTransaction((objectStore) => {
+      objectStore.index(this.#indexName).openKeyCursor(query, direction);
+    });
+  }
 }
