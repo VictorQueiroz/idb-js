@@ -32,7 +32,7 @@ export default class ObjectStore<Value, ObjectStoreNames> {
   public async openCursor(
     query?: IDBValidKey | IDBKeyRange | null,
     direction?: IDBCursorDirection
-  ): Promise<IDBRequest<IDBCursorWithValue | null> | null> {
+  ) {
     return (await this.#value)?.openCursor(query, direction) ?? null;
   }
   public async delete(key: IDBValidKey | IDBKeyRange) {
