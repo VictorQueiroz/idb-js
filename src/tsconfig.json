@@ -2,6 +2,7 @@
   "extends": "../tsconfig.base.json",
   "include": [
     "ObjectStore.ts",
+    "DatabaseThread.ts",
     "ObjectStoreIndex.ts",
     "Transaction.ts",
     "types.ts",

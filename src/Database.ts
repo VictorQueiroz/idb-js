@@ -1,3 +1,4 @@
+import DatabaseThread from "./DatabaseThread";
 import idbRequestToPromise from "./idbRequestToPromise";
 import Transaction from "./Transaction";
 
@@ -6,6 +7,7 @@ export default class Database<
 > {
   readonly #database: Promise<IDBDatabase | null>;
   readonly #request;
+  readonyl #thread = new DatabaseThread();
   public constructor(databaseName: string, version: number) {
     const req = indexedDB.open(databaseName, version);
     this.#request = req;
@@ -21,6 +23,7 @@ export default class Database<
   ): Transaction<ModelMap, K> {
     return new Transaction<ModelMap, K>(
       this.result(),
+      thread,
       storeNames,
       mode,
       options

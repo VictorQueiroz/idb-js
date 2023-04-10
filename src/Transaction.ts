@@ -1,3 +1,4 @@
+import DatabaseThread from "./DatabaseThread";
 import ObjectStore from "./ObjectStore";
 
 export default class Transaction<
@@ -7,6 +8,7 @@ export default class Transaction<
   readonly #value;
   public constructor(
     private readonly database: Promise<IDBDatabase | null>,
+    private readonly thread: DatabaseThread,
     private readonly storeNames: K | K[],
     private readonly mode: IDBTransactionMode,
     private readonly options: IDBTransactionOptions
@@ -18,9 +20,6 @@ export default class Transaction<
     );
   }
   public objectStore(name: K) {
-    return new ObjectStore<ModelMap[K], K>(this.#value, name);
-  }
-  public value() {
-    return this.#value;
+    return new ObjectStore<ModelMap[K], K>(this.#value, thread, name);
   }
 }

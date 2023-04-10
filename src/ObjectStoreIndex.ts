@@ -1,11 +1,15 @@
+import DatabaseThread from "./DatabaseThread";
 import idbRequestToPromise from "./idbRequestToPromise";
 
 export default class ObjectStoreIndex<Value, K extends keyof Value> {
   readonly #value;
+  readonly #thread;
   public constructor(
     objectStore: Promise<IDBObjectStore | null>,
+    thread: DatabaseThread,
     name: string
   ) {
+    this.#thread = thread;
     this.#value = objectStore.then((objectStore) =>
       objectStore ? objectStore.index(name) : null
     );
@@ -26,7 +30,9 @@ export default class ObjectStoreIndex<Value, K extends keyof Value> {
     }
     const indexValue = index;
     return indexValue
-      ? idbRequestToPromise<Value>(() => indexValue.get(value as IDBValidKey))
+      ? this.#thread.run(() =>
+          idbRequestToPromise<Value>(() => indexValue.get(value as IDBValidKey))
+        )
       : null;
   }
 }
