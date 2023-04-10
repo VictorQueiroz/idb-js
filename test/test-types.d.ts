@@ -1,1 +1,3 @@
-declare const domTest: (fn: (() => void) | (() => void)) => void;
+declare const onFailure: (value: string) => void;
+
+declare const onSuccess: () => void;

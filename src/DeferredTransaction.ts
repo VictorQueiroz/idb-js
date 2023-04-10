@@ -34,7 +34,7 @@ export default class DeferredTransaction {
     }
     const promise = this.#thread.run(async () => {
       const db = await this.#database;
-      if (!db) {
+      if (db === null) {
         return null;
       }
       return fn(

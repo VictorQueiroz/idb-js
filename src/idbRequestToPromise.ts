@@ -13,7 +13,7 @@ export default function idbRequestToPromise<T>(getReq: () => IDBRequest<T>) {
       resolve(null);
     };
     req.onsuccess = () => {
-      resolve(req.result);
+      resolve(req.result ?? null);
     };
   });
 }

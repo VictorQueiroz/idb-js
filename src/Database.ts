@@ -19,7 +19,7 @@ export default class Database<
   public transaction<K extends keyof ModelMap>(
     storeNames: K | K[],
     mode: IDBTransactionMode,
-    options: IDBTransactionOptions
+    options: IDBTransactionOptions = {}
   ): Transaction<ModelMap, K> {
     return new Transaction<ModelMap, K>(
       this.result(),

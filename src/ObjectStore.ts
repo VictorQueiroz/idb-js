@@ -22,9 +22,9 @@ export default class ObjectStore<Value> extends DeferredTransaction {
     this.#database = database;
     this.#openTransactionInfo = openTransactionInfo;
   }
-  public async put(value: Value) {
+  public async put(value: Value, key?: IDBValidKey) {
     return this.openTransaction((objectStore) =>
-      idbRequestToPromise(() => objectStore.put(value))
+      idbRequestToPromise(() => objectStore.put(value, key))
     );
   }
   public async getAll(
