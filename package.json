@@ -8,6 +8,7 @@
     "eslint": "^8.38.0",
     "express": "^4.18.2",
     "html-webpack-plugin": "5.x",
+    "package-utilities": "0.x",
     "prettier": "^2.8.7",
     "puppeteer": "19.x",
     "ts-node": "^10.9.1",
@@ -18,12 +19,26 @@
   },
   "main": "./src/index.js",
   "scripts": {
-    "prepublishOnly": "npx tsc -b src --force"
+    "build:es": "npx tsc --project src --module ESNext --outDir es",
+    "build": "npx tsc -b src --force",
+    "prepublishOnly": "yarn run build && yarn run set-es-paths",
+    "set-es-paths": "yarn run build:es && npx package-utilities --set-es-paths --include \"src/**/*.js\" --es-folder es"
   },
   "name": "idb-javascript",
   "license": "MIT",
   "version": "0.0.17",
   "files": [
     "src/**/*.{js,map,d.ts}"
-  ]
+  ],
+  "browser": {
+    "./src/types.js": "./es/src/types.js",
+    "./src/index.js": "./es/src/index.js",
+    "./src/idbRequestToPromise.js": "./es/src/idbRequestToPromise.js",
+    "./src/Transaction.js": "./es/src/Transaction.js",
+    "./src/ObjectStoreIndex.js": "./es/src/ObjectStoreIndex.js",
+    "./src/ObjectStore.js": "./es/src/ObjectStore.js",
+    "./src/DeferredTransaction.js": "./es/src/DeferredTransaction.js",
+    "./src/DatabaseThread.js": "./es/src/DatabaseThread.js",
+    "./src/Database.js": "./es/src/Database.js"
+  }
 }
