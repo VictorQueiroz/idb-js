@@ -28,7 +28,7 @@
   "license": "MIT",
   "version": "0.0.18",
   "files": [
-    "src/**/*.{js,map,d.ts}"
+    "{es,src}/**/*.{js,map,d.ts}"
   ],
   "browser": {
     "./src/types.js": "./es/src/types.js",
