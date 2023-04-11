@@ -36,9 +36,9 @@ export default class ObjectStore<Value> extends DeferredTransaction {
     );
   }
   public async get(query: IDBValidKey | IDBKeyRange) {
-    return this.openTransaction((objectStore) => {
-      return idbRequestToPromise<Value>(() => objectStore.get(query));
-    });
+    return this.openTransaction((objectStore) =>
+      idbRequestToPromise<Value>(() => objectStore.get(query))
+    );
   }
   public openKeyCursor(
     query?: IDBValidKey | IDBKeyRange | null,
