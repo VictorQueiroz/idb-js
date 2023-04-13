@@ -34,33 +34,39 @@ class RecordingDb extends Database<{
 domTest("it should return null if no record is found", async () => {
   const db = new RecordingDb(randomDbName(), 1);
   expect(
-    await db
-      .transaction("recordings", "readonly", {})
-      .objectStore("recordings")
-      .index("id")
-      .get("1")
+    await (
+      await db
+        .transaction("recordings", "readonly", {})
+        .objectStore("recordings")
+        .index("id")
+        .get("1")
+    )?.value()
   ).to.be.null;
 });
 
 domTest("it should not return null if record is found", async () => {
   const db = new RecordingDb(randomDbName(), 1);
   expect(
-    await db
-      .transaction("recordings", "readwrite")
-      .objectStore("recordings")
-      .put(
-        {
-          id: "1",
-        },
-        "1"
-      )
+    await (
+      await db
+        .transaction("recordings", "readwrite")
+        .objectStore("recordings")
+        .put(
+          {
+            id: "1",
+          },
+          "1"
+        )
+    )?.value()
   ).to.be.equal("1");
   expect(
-    await db
-      .transaction("recordings", "readonly", {})
-      .objectStore("recordings")
-      .index("id")
-      .get("1")
+    await (
+      await db
+        .transaction("recordings", "readonly", {})
+        .objectStore("recordings")
+        .index("id")
+        .get("1")
+    )?.value()
   ).to.be.deep.equal({ id: "1" });
 });
 
