@@ -1,4 +1,4 @@
-import DatabaseThread from "./DatabaseThread";
+import { IDatabaseThread } from "./DatabaseThread";
 
 export interface IOpenTransactionInfo {
   storeNames: string | string[];
@@ -15,7 +15,7 @@ export default class DeferredTransaction {
   public constructor(
     database: Promise<IDBDatabase | null>,
     openTransactionInfo: IOpenTransactionInfo,
-    thread: DatabaseThread,
+    thread: IDatabaseThread,
     objectStoreName: string
   ) {
     this.#objectStore = null;

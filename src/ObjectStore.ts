@@ -1,4 +1,4 @@
-import DatabaseThread from "./DatabaseThread";
+import { IDatabaseThread } from "./DatabaseThread";
 import DeferredTransaction, {
   IOpenTransactionInfo,
 } from "./DeferredTransaction";
@@ -13,7 +13,7 @@ export default class ObjectStore<Value> extends DeferredTransaction {
   public constructor(
     database: Promise<IDBDatabase | null>,
     openTransactionInfo: IOpenTransactionInfo,
-    thread: DatabaseThread,
+    thread: IDatabaseThread,
     objectStoreName: string
   ) {
     super(database, openTransactionInfo, thread, objectStoreName);

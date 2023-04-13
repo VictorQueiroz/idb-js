@@ -1,4 +1,8 @@
-export default class DatabaseThread {
+export interface IDatabaseThread {
+  run<R>(fn: () => Promise<R>): Promise<R>;
+}
+
+export default class DatabaseThread implements IDatabaseThread {
   #pending = Promise.resolve();
   public run<R>(fn: () => Promise<R>): Promise<R> {
     const promise = this.#pending.then(() => fn());

@@ -1,4 +1,4 @@
-import DatabaseThread from "./DatabaseThread";
+import { IDatabaseThread } from "./DatabaseThread";
 import ObjectStore from "./ObjectStore";
 
 export default class Transaction<
@@ -13,7 +13,7 @@ export default class Transaction<
   #objectStore: ObjectStore<unknown> | null;
   public constructor(
     database: Promise<IDBDatabase | null>,
-    thread: DatabaseThread,
+    thread: IDatabaseThread,
     storeNames: K | K[],
     mode: IDBTransactionMode,
     options: IDBTransactionOptions

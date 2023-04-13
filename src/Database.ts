@@ -1,4 +1,4 @@
-import DatabaseThread from "./DatabaseThread";
+import DatabaseThread, { IDatabaseThread } from "./DatabaseThread";
 import idbRequestToPromise from "./idbRequestToPromise";
 import Transaction from "./Transaction";
 
@@ -7,9 +7,18 @@ export default class Database<
 > {
   readonly #database: Promise<IDBDatabase | null>;
   readonly #request;
-  readonly #thread = new DatabaseThread();
-  public constructor(databaseName: string, version: number) {
+  readonly #thread;
+  public constructor(
+    databaseName: string,
+    version: number,
+    {
+      thread = new DatabaseThread(),
+    }: {
+      thread: IDatabaseThread;
+    }
+  ) {
     const req = indexedDB.open(databaseName, version);
+    this.#thread = thread;
     this.#request = req;
     this.#database = idbRequestToPromise(() => {
       req.onupgradeneeded = this.onUpgradeNeeded;
