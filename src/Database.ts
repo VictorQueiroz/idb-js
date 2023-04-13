@@ -14,7 +14,7 @@ export default class Database<
     this.#database = idbRequestToPromise(() => {
       req.onupgradeneeded = this.onUpgradeNeeded;
       return req;
-    });
+    }).value();
   }
   public transaction<K extends keyof ModelMap>(
     storeNames: K | K[],
