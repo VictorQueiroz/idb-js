@@ -30,6 +30,14 @@
   "files": [
     "{es,src}/**/*.{js,map,d.ts}"
   ],
+  "keywords": [
+    "indexeddb",
+    "indexed-db",
+    "database",
+    "data",
+    "web",
+    "data-persistence"
+  ],
   "browser": {
     "./src/types.js": "./es/src/types.js",
     "./src/index.js": "./es/src/index.js",
