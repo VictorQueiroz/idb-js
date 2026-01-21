@@ -19,7 +19,7 @@
     "build": "npx tsc -b src --force",
     "prepublishOnly": "npm run build && npm run set-es-paths && npm run test",
     "set-es-paths": "npm run build:es && npx package-utilities --set-es-paths --include \"src/**/*.js\" --es-folder es",
-    "test": "npx vitest --run --coverage"
+    "test": "CI=1 npx vitest run --coverage"
   },
   "name": "idb-javascript",
   "license": "MIT",
