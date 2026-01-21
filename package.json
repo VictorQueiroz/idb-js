@@ -15,9 +15,9 @@
   },
   "main": "./src/index.js",
   "scripts": {
-    "build:es": "npx tsc --project src --module ESNext --outDir es",
+    "build:es": "npx tsc --project src --module esnext --moduleResolution classic --outDir es",
     "build": "npx tsc -b src --force",
-    "prepublishOnly": "npm run build && npm run test && npm run set-es-paths",
+    "prepublishOnly": "npm run build && npm run set-es-paths && npm run test",
     "set-es-paths": "npm run build:es && npx package-utilities --set-es-paths --include \"src/**/*.js\" --es-folder es",
     "test": "npx vitest --run --coverage"
   },
@@ -43,7 +43,9 @@
     "./src/ObjectStoreIndex.js": "./es/src/ObjectStoreIndex.js",
     "./src/ObjectStore.js": "./es/src/ObjectStore.js",
     "./src/DeferredTransaction.js": "./es/src/DeferredTransaction.js",
+    "./src/DatabaseThreadDummy.js": "./es/src/DatabaseThreadDummy.js",
     "./src/DatabaseThread.js": "./es/src/DatabaseThread.js",
-    "./src/Database.js": "./es/src/Database.js"
+    "./src/Database.js": "./es/src/Database.js",
+    "./src/Cursor.js": "./es/src/Cursor.js"
   }
 }
