@@ -96,4 +96,36 @@ describe("Database", () => {
       Array.from(expectedResults).sort((a, b) => a.id.localeCompare(b.id))
     );
   });
+
+  it("should async iterate over the cursor without specifying an index", async () => {
+    const db = new RecordingDb(randomDbName(), 1);
+    const expectedResults = new Array<{ id: string }>();
+    for (let i = 0; i < 200; i++) {
+      expectedResults.push({ id: i.toString() });
+      expect(
+        await db
+          .transaction("recordings", "readwrite")
+          .objectStore("recordings")
+          .put({ id: i.toString() }, i.toString())
+      ).to.be.equal(i.toString());
+    }
+
+    const cursor = await db
+      .transaction("recordings", "readonly")
+      .objectStore("recordings")
+      .openCursorIter();
+
+    if (cursor === null) {
+      throw new Error("Cursor is null");
+    }
+
+    const results = [];
+    for await (const result of cursor) {
+      results.push(result);
+    }
+
+    expect(results).to.be.deep.equal(
+      Array.from(expectedResults).sort((a, b) => a.id.localeCompare(b.id))
+    );
+  });
 });

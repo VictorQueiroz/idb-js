@@ -10,7 +10,7 @@ export default class Cursor<T> implements AsyncIterator<T> {
     | null;
 
   public constructor(
-    objectStore: IDBObjectStore,
+    objectStore: IDBObjectStore | IDBIndex,
     query?: IDBValidKey | IDBKeyRange | null,
     direction?: IDBCursorDirection
   ) {

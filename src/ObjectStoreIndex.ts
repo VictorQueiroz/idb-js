@@ -40,7 +40,7 @@ export default class ObjectStoreIndex<
     direction?: IDBCursorDirection
   ) {
     return this.openTransaction((objectStore) => {
-      return new Cursor<Value>(objectStore, query, direction);
+      return new Cursor<Value>(objectStore.index(this.#indexName), query, direction);
     });
   }
   public openKeyCursor(
