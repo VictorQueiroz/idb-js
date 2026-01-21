@@ -13,9 +13,9 @@ export default class Database<
     version: number,
     {
       thread = new DatabaseThread(),
-    }: {
+    }: Partial<{
       thread: IDatabaseThread;
-    }
+    }> = {}
   ) {
     const req = indexedDB.open(databaseName, version);
     this.#thread = thread;
