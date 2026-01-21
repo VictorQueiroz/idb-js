@@ -27,7 +27,7 @@ export default class Transaction<
   }
   public objectStore(name: K) {
     if (!this.#objectStore) {
-      this.#objectStore = new ObjectStore<ModelMap[K]>(
+      this.#objectStore = new ObjectStore<unknown>(
         this.#database,
         {
           storeNames: this.#storeNames as string,

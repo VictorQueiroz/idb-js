@@ -8,6 +8,7 @@
     "Transaction.ts",
     "types.ts",
     "index.ts",
+    "Cursor.ts",
     "ObjectStoreIndex.ts",
     "DatabaseThreadDummy.ts",
     "Database.ts",

@@ -1,3 +1,4 @@
+import Cursor from "./Cursor";
 import { IDatabaseThread } from "./DatabaseThread";
 import DeferredTransaction, {
   IOpenTransactionInfo,
@@ -55,6 +56,14 @@ export default class ObjectStore<Value> extends DeferredTransaction {
     return this.openTransaction((objectStore) =>
       objectStore.openCursor(query, direction)
     );
+  }
+  public async openCursorIter(
+    query?: IDBValidKey | IDBKeyRange | null,
+    direction?: IDBCursorDirection
+  ) {
+    return this.openTransaction((objectStore) => {
+      return new Cursor<Value>(objectStore, query, direction);
+    });
   }
   public async delete(key: IDBValidKey | IDBKeyRange) {
     return this.openTransaction((store) =>
